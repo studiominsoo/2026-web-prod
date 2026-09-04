@@ -1,0 +1,4 @@
+# 로컬 개발용 환경변수 템플릿입니다.
+# 이 파일을 .dev.vars로 복사하고 값을 채우세요 (.dev.vars는 git에 올라가지 않습니다).
+ADMIN_PASSWORD=local-test-password
+ADMIN_SECRET=local-test-secret-change-me

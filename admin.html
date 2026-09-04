@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 — jeongminsoo</title>
+<style>
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background:#F7F7F7;
+    color:#111;
+  }
+  a{ color:inherit; }
+
+  /* login */
+  #loginView{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .login-box{
+    background:#fff;
+    border:1px solid #ccc;
+    padding:32px 28px;
+    width:280px;
+  }
+  .login-box h1{ font-size:16px; font-weight:400; margin:0 0 20px; }
+  .login-box input{
+    width:100%;
+    padding:10px;
+    margin-bottom:12px;
+    border:1px solid #999;
+    font-size:15px;
+  }
+  .login-box button{
+    width:100%;
+    padding:10px;
+    background:#000;
+    color:#fff;
+    border:none;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .login-error{ color:#c00; font-size:13px; margin:0 0 12px; }
+
+  /* dashboard */
+  #dashboardView{ max-width:860px; margin:0 auto; padding:40px 24px 100px; }
+  .admin-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:40px;
+  }
+  .admin-header h1{ font-size:18px; font-weight:400; }
+  .logout-btn{
+    background:none;
+    border:1px solid #999;
+    padding:6px 12px;
+    font-size:13px;
+    cursor:pointer;
+  }
+
+  section{ margin-bottom:56px; }
+  section h2{ font-size:15px; font-weight:700; margin-bottom:16px; border-bottom:1px solid #414141; padding-bottom:8px; }
+
+  .type-block{ margin-bottom:20px; }
+  .type-block h3{ font-size:14px; font-weight:700; margin-bottom:8px; }
+  .tag-list{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .tag{
+    background:#fff;
+    border:1px solid #ccc;
+    padding:4px 10px;
+    font-size:13px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .tag button{
+    background:none; border:none; cursor:pointer; color:#c00; font-size:13px; padding:0;
+  }
+  .tag .move-btn{ color:#333; }
+  .type-head{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .type-head h3{ margin:0; }
+  .type-head .move-btn,
+  .type-head .rename-btn{
+    background:none; border:1px solid #ccc; cursor:pointer; font-size:11px; padding:2px 6px;
+  }
+  .inline-form{ display:flex; gap:8px; }
+  .inline-form input{ flex:1; padding:6px 8px; border:1px solid #999; font-size:13px; }
+  .inline-form button{ padding:6px 12px; border:1px solid #333; background:#fff; cursor:pointer; font-size:13px; }
+
+  .meta-row{ display:flex; gap:6px; margin-bottom:6px; }
+  .meta-row input{ flex:1; padding:6px 8px; border:1px solid #999; font-size:13px; }
+  .meta-row button{ padding:4px 8px; border:1px solid #999; background:#fff; cursor:pointer; font-size:12px; }
+  .add-meta-btn{ padding:6px 12px; border:1px solid #333; background:#fff; cursor:pointer; font-size:13px; }
+
+  .popup-row{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    border:1px solid #ddd; padding:8px; margin-bottom:8px; background:#fff;
+  }
+  .popup-row select,
+  .popup-row input[type=text]{ font-size:12px; padding:4px; border:1px solid #999; }
+  .popup-row .popup-thumb-preview{ width:48px; height:48px; object-fit:cover; border:1px solid #ccc; }
+  .popup-row .popup-remove{ padding:4px 8px; border:1px solid #999; background:#fff; cursor:pointer; font-size:11px; margin-left:auto; }
+
+  .image-thumb-list{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+  .image-thumb{ position:relative; width:100px; }
+  .image-thumb img,
+  .image-thumb video{ width:100px; height:100px; object-fit:cover; display:block; border:1px solid #ccc; }
+  .image-thumb .layout-select{ width:100px; font-size:10px; margin-top:4px; }
+  .image-thumb .thumb-actions{ display:flex; gap:4px; margin-top:4px; }
+  .image-thumb button{ flex:1; font-size:10px; padding:3px; border:1px solid #999; background:#fff; cursor:pointer; }
+  .image-thumb.is-cover img,
+  .image-thumb.is-cover video{ border:2px solid #000; }
+  .image-thumb .cover-badge{
+    position:absolute; top:2px; left:2px; background:#000; color:#fff; font-size:9px; padding:1px 4px;
+  }
+
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:13px; margin-bottom:4px; }
+  .field-hint{ font-size:11px; color:#777; margin:0 0 6px; }
+  .field-hint code{ background:#eee; padding:1px 4px; }
+  .bg-color-row{ display:flex; align-items:center; gap:8px; }
+  .bg-color-row input[type=color]{ width:44px; height:32px; padding:2px; border:1px solid #999; }
+  .bg-color-row button{ padding:6px 12px; border:1px solid #999; background:#fff; cursor:pointer; font-size:12px; }
+  .field input,
+  .field textarea{
+    width:100%;
+    padding:8px;
+    border:1px solid #999;
+    font-size:14px;
+    font-family:inherit;
+  }
+  .field textarea{ min-height:80px; resize:vertical; }
+
+  .checkbox-group{ display:flex; flex-wrap:wrap; gap:12px; }
+  .checkbox-group label{ display:flex; align-items:center; gap:4px; font-size:13px; }
+
+  .primary-btn{
+    padding:10px 20px;
+    background:#000;
+    color:#fff;
+    border:none;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .cancel-btn{
+    padding:10px 20px;
+    background:#fff;
+    border:1px solid #999;
+    font-size:14px;
+    cursor:pointer;
+    margin-left:8px;
+  }
+
+  .project-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px dotted #999;
+    font-size:14px;
+  }
+  .project-row .actions button{
+    margin-left:8px;
+    padding:4px 10px;
+    font-size:12px;
+    border:1px solid #999;
+    background:#fff;
+    cursor:pointer;
+  }
+
+  .status-msg{ font-size:13px; margin-top:8px; }
+  .status-msg.error{ color:#c00; }
+  .status-msg.success{ color:#0a7a2f; }
+
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div id="loginView">
+  <div class="login-box">
+    <h1>관리자 로그인</h1>
+    <p class="login-error" id="loginError" hidden>비밀번호가 틀렸습니다.</p>
+    <input type="password" id="passwordInput" placeholder="비밀번호" autofocus>
+    <button id="loginBtn">로그인</button>
+  </div>
+</div>
+
+<div id="dashboardView" hidden>
+  <div class="admin-header">
+    <h1>관리자 대시보드</h1>
+    <button class="logout-btn" id="logoutBtn">로그아웃</button>
+  </div>
+
+  <section>
+    <h2>분류 기준 &amp; 항목</h2>
+    <div id="typesContainer"></div>
+
+    <div class="type-block">
+      <h3>새 분류 기준 추가 (예: client)</h3>
+      <form class="inline-form" id="newTypeForm">
+        <input type="text" id="newTypeKey" placeholder="key (영문, 예: client)" required>
+        <input type="text" id="newTypeLabel" placeholder="화면에 보일 이름 (예: 클라이언트)" required>
+        <button type="submit">추가</button>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="projectFormTitle">새 프로젝트 추가</h2>
+    <form id="projectForm">
+      <div class="field">
+        <label for="projectTitle">제목</label>
+        <input type="text" id="projectTitle" required>
+      </div>
+      <div class="field">
+        <label for="projectBgColor">상세페이지 배경색 (비워두면 기본값 #F2F2F2)</label>
+        <div class="bg-color-row">
+          <input type="color" id="projectBgColor" value="#f2f2f2">
+          <button type="button" id="resetBgColorBtn">기본값으로</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>메타 정보 (소재/규격/연도 등, 항목별로 추가·순서변경 가능)</label>
+        <p class="field-hint">일부만 링크로 만들려면 <code>[텍스트](https://주소)</code> 형식으로 쓰세요. 예: 클라이언트 [@studio](https://instagram.com/studio)</p>
+        <div id="metaItemsList"></div>
+        <button type="button" class="add-meta-btn" id="addMetaBtn">+ 메타 항목 추가</button>
+      </div>
+      <div class="field">
+        <label for="projectDescription">설명</label>
+        <p class="field-hint">일부만 링크로 만들려면 <code>[텍스트](https://주소)</code> 형식으로 쓰세요.</p>
+        <textarea id="projectDescription"></textarea>
+      </div>
+      <div class="field">
+        <label>분류</label>
+        <div class="checkbox-group" id="categoryCheckboxes"></div>
+      </div>
+      <div class="field">
+        <label>기존 이미지/영상 (대표로 설정하거나 삭제할 수 있어요)</label>
+        <div class="image-thumb-list" id="existingImagesList"></div>
+      </div>
+      <div class="field">
+        <label for="projectImages">새 이미지/영상 추가 (선택하면 바로 업로드되어 위 목록에 나타나요, 여러 개 선택 가능, GIF·MP4·WebM·MOV, 영상은 50MB 이하)</label>
+        <input type="file" id="projectImages" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm,video/quicktime" multiple>
+      </div>
+      <div class="field">
+        <label>연계/메모 팝업 (스크롤 중 특정 이미지 지점에서 나타나는 카드)</label>
+        <p class="field-hint">PC에서는 이미지 옆 여백에 나타나고, 여백이 좁은 화면/모바일에서는 페이지 맨 아래 3열 그리드로 모아서 보여줘요.</p>
+        <div id="popupsList"></div>
+        <button type="button" class="add-meta-btn" id="addPopupBtn">+ 팝업 추가</button>
+      </div>
+      <input type="hidden" id="editingProjectId">
+      <button type="submit" class="primary-btn" id="projectSubmitBtn">추가</button>
+      <button type="button" class="cancel-btn" id="cancelEditBtn" hidden>취소</button>
+      <p class="status-msg" id="projectFormStatus"></p>
+    </form>
+  </section>
+
+  <section>
+    <h2>등록된 프로젝트</h2>
+    <div id="projectList"></div>
+  </section>
+</div>
+
+<script src="admin.js?v=27"></script>
+</body>
+</html>

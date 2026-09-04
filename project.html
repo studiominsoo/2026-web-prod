@@ -16,9 +16,20 @@
 
 <div class="stage">
   <div class="content-layer" id="contentLayer">
-    <hr class="divider">
-    <main class="home-page">
-      <div class="image-grid" id="homeGrid"></div>
+    <div class="category-head">
+      <p class="category-label"><a id="categoryBackLink" href="#"></a></p>
+      <hr class="divider category-divider">
+    </div>
+
+    <main class="project-page">
+      <div class="project-title-row">
+        <button type="button" class="nav-dot" id="prevDot" aria-label="이전 프로젝트" disabled></button>
+        <h1 class="project-title" id="projectTitle"></h1>
+        <button type="button" class="nav-dot" id="nextDot" aria-label="다음 프로젝트" disabled></button>
+      </div>
+      <div class="project-meta" id="projectMeta"></div>
+      <p class="project-description" id="projectDescription"></p>
+      <div class="project-images" id="projectImages"></div>
     </main>
   </div>
 
@@ -32,6 +43,6 @@
 <footer class="site-footer">&copy; 2026 jeongminsoo. All rights reserved.</footer>
 
 <script src="script.js?v=27"></script>
-<script src="home.js?v=27"></script>
+<script src="project.js?v=27"></script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+# 로컬 개발(wrangler pages dev) 전용 설정입니다.
+# 실제 배포(Cloudflare Pages Git 연동)는 이 파일을 쓰지 않고 대시보드의
+# Settings → Functions에서 설정한 D1/R2 바인딩을 그대로 사용합니다.
+name = "studiominsoo-web-dev-local"
+pages_build_output_dir = "."
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "studiominsoo-web"
+# 로컬 전용 모드(--local, 기본값)에서는 실제 ID가 없어도 로컬 SQLite로 동작합니다.
+# 대시보드에서 D1을 만든 뒤, 실제 Database ID로 바꿔두면 `wrangler d1 execute --remote`로
+# 운영 DB에 마이그레이션을 적용할 때도 이 설정을 그대로 씁니다.
+database_id = "ba5dfddf-6d6c-4b4f-8823-ad4c5c8e4b83"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "studiominsoo-images"
